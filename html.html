@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Roblox Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #e3e3e3;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .login-container {
+      background-color: white;
+      width: 90%;
+      max-width: 400px;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .login-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 22px;
+      color: #222;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .login-btn {
+      width: 100%;
+      background-color: #d72c2c;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .login-btn:hover {
+      background-color: #b52424;
+    }
+
+    .link {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 13px;
+    }
+
+    .link a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .link a:hover {
+      text-decoration: underline;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo img {
+      width: 140px;
+      max-width: 100%;
+    }
+
+    .loading-screen {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .loading-spinner {
+      border: 5px solid #ccc;
+      border-top: 5px solid #d72c2c;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+    }
+
+    .loading-text {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #333;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .warning-popup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.85);
+      color: white;
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .warning-popup button {
+      margin-top: 20px;
+      padding: 12px 20px;
+      font-size: 16px;
+      background-color: #d72c2c;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .video-container {
+      display: none;
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top: 0; left: 0;
+      background: black;
+      justify-content: center;
+      align-items: center;
+      z-index: 1001;
+    }
+
+    .video-container iframe {
+      width: 90%;
+      height: 50vh;
+      max-height: 300px;
+      border: none;
+    }
+
+    @media (min-height: 700px) {
+      .video-container iframe {
+        height: 60vh;
+        max-height: 400px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .video-container iframe {
+        width: 560px;
+        height: 315px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container" id="loginBox">
+    <div class="logo">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/7/75/Roblox_Logo_2022.svg" alt="Roblox Logo">
+    </div>
+    <h2>Log In</h2>
+    <form onsubmit="rickRoll(event)">
+      <div class="input-group">
+        <label for="username">Username or Email</label>
+        <input type="text" id="username" required>
+      </div>
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" required>
+      </div>
+      <button type="submit" class="login-btn">Log In</button>
+    </form>
+    <div class="link">
+      <p><a href="#">Forgot Password or Username?</a></p>
+      <p>Don't have an account? <a href="#">Sign up</a></p>
+    </div>
+  </div>
+
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Logging in...</div>
+  </div>
+
+  <div class="warning-popup" id="warningPopup">
+    <h2>⚠️ Sound Warning</h2>
+    <p>This game will open with sound. Please make sure your volume is at a comfortable level.</p>
+    <button onclick="playRickroll()">Continue</button>
+  </div>
+
+  <div class="video-container" id="videoContainer">
+    <iframe id="rickrollVideo"
+      src=""
+      allow="autoplay"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+  <script>
+    function rickRoll(event) {
+      event.preventDefault();
+      document.getElementById("loadingScreen").style.display = "flex";
+
+      setTimeout(() => {
+        document.getElementById("loadingScreen").style.display = "none";
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("warningPopup").style.display = "flex";
+      }, 3000);
+    }
+
+    function playRickroll() {
+      document.getElementById("warningPopup").style.display = "none";
+      document.getElementById("videoContainer").style.display = "flex";
+      document.getElementById("rickrollVideo").src = "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=1";
+    }
+  </script>
+
+</body>
+</html>
